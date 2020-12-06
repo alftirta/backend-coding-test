@@ -43,7 +43,7 @@ module.exports = (db) => {
     if (typeof driver_name !== 'string' || driver_name.length < 1) {
       return res.status(400).json({
         code: 0,
-        message: 'Rider name must be a non empty string',
+        message: 'Driver name must be a non empty string',
         data: null
       });
     }
@@ -51,7 +51,7 @@ module.exports = (db) => {
     if (typeof driver_vehicle !== 'string' || driver_vehicle.length < 1) {
       return res.status(400).json({
         code: 0,
-        message: 'Rider name must be a non empty string',
+        message: 'Driver vehicle must be a non empty string',
         data: null
       });
     }
