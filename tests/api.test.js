@@ -9,24 +9,24 @@ const app = require('../src/app')(db);
 const buildSchemas = require('../src/schemas');
 
 describe('API tests', () => {
-    before((done) => {
-        db.serialize((err) => { 
-            if (err) {
-                return done(err);
-            }
+  before((done) => {
+    db.serialize((err) => { 
+      if (err) {
+        return done(err);
+      }
 
-            buildSchemas(db);
+      buildSchemas(db);
 
-            done();
-        });
+      done();
     });
+  });
 
-    describe('GET /', () => {
-        it('should return ok', (done) => {
-            request(app)
-                .get('/')
-                .expect('Content-Type', /json/)
-                .expect(200, done);
-        });
+  describe('GET /', () => {
+    it('should return ok', (done) => {
+      request(app)
+        .get('/')
+        .expect('Content-Type', /json/)
+        .expect(200, done);
     });
+  });
 });
