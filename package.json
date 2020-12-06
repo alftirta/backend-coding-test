@@ -7,10 +7,15 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "mocha tests",
+    "lint": "./node_modules/.bin/eslint .",
+    "test": "npm run lint && mocha tests",
+    "coverage": "nyc npm run test",
     "start": "node index.js",
     "dev": "nodemon index.js"
   },
+  "pre-push": [
+    "test"
+  ],
   "keywords": [
     "Kanggo"
   ],
@@ -20,11 +25,15 @@
     "body-parser": "^1.19.0",
     "dotenv": "^8.2.0",
     "express": "^4.16.4",
-    "sqlite3": "^4.0.6"
+    "sqlite3": "^4.0.6",
+    "winston": "^3.3.3"
   },
   "devDependencies": {
+    "eslint": "^7.15.0",
     "mocha": "^6.1.4",
     "nodemon": "^2.0.6",
+    "nyc": "^15.1.0",
+    "pre-push": "^0.1.1",
     "supertest": "^4.0.2"
   }
 }
