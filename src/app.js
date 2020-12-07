@@ -7,13 +7,13 @@ const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 
 module.exports = (db) => {
-  app.get('/', (req, res) => {
-    res.status(200).json({
+  app.get('/', async (req, res) => {
+    await res.status(200).json({
       code: 1, message: 'ok', data: null
     });
   });
 
-  app.post('/rides', jsonParser, (req, res) => {
+  app.post('/rides', jsonParser, async (req, res) => {
     const {start_lat, start_long, end_lat, end_long, rider_name, driver_name, driver_vehicle} = req.body;
 
     if (Number(start_lat) < -75 || Number(start_lat) > 75 || Number(start_long) < -195 || Number(start_long) > 195) {
@@ -60,7 +60,7 @@ module.exports = (db) => {
     const query = `INSERT INTO Rides(startLat, startLong, endLat, endLong, riderName, driverName, driverVehicle) 
                    VALUES (?, ?, ?, ?, ?, ?, ?)`;
 
-    db.run(query, values, function (err) {
+    await db.run(query, values, function (err) {
       if (err) {
         return res.status(400).json({
           code: 0,
@@ -83,8 +83,8 @@ module.exports = (db) => {
     });
   });
 
-  app.get('/rides', (req, res) => {
-    db.all('SELECT * FROM Rides', (err, rows) => {
+  app.get('/rides', async (req, res) => {
+    await db.all('SELECT * FROM Rides', (err, rows) => {
       if (err) {
         return res.status(400).json({
           code: 0,
@@ -117,8 +117,8 @@ module.exports = (db) => {
     });
   });
 
-  app.get('/rides/:id', (req, res) => {
-    db.all(`SELECT * FROM Rides WHERE rideID='${req.params.id}'`, (err, rows) => {
+  app.get('/rides/:id', async (req, res) => {
+    await db.all(`SELECT * FROM Rides WHERE rideID='${req.params.id}'`, (err, rows) => {
       if (err) {
         return res.status(400).json({
           code: 0,
