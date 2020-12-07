@@ -9,8 +9,8 @@ const app = require('../src/app')(db);
 const buildSchemas = require('../src/schemas');
 
 describe('API tests', () => {
-  before((done) => {
-    db.serialize((err) => { 
+  before(async (done) => {
+    await db.serialize((err) => { 
       if (err) {
         return done(err);
       }
@@ -175,8 +175,8 @@ describe('API tests', () => {
   });
 
   describe('GET /rides', () => {
-    before((done) => {
-      db.serialize((err) => { 
+    before(async (done) => {
+      await db.serialize((err) => { 
         if (err) {
           return done(err);
         }
@@ -187,8 +187,8 @@ describe('API tests', () => {
       });
     });
 
-    afterEach((done) => {
-      db.serialize((err) => { 
+    afterEach(async (done) => {
+      await db.serialize((err) => { 
         if (err) {
           return done(err);
         }
