@@ -101,7 +101,19 @@ module.exports = (db) => {
         });
       }
 
-      res.send(rows);
+      const result = {};
+
+      result.total_results = rows.length;
+
+      result.page = +req.query.page || 1;
+      result.per_page = +req.query.per_page || 5;
+      result.total_pages = Math.ceil(result.total_results / result.per_page);
+
+      const start = (result.page - 1) * result.per_page;
+      const end = result.page * result.per_page;
+      result.rides = rows.slice(start, end);
+
+      res.send(result);
     });
   });
 

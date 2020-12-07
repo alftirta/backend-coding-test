@@ -214,21 +214,50 @@ describe('API tests', () => {
         }, done);
     });
 
-    it('should return all rides', (done) => {
+    it('should return all rides with default pagination settings', (done) => {
       request(app)
         .get('/rides')
         .expect('Content-Type', /json/)
-        .expect(200, [{
-          rideID: 2,
-          startLat: -75,
-          startLong: -195,
-          endLat: 75,
-          endLong: 195,
-          riderName: 'rider\'s name',
-          driverName: 'driver\'s name',
-          driverVehicle: 'driver\'s vehicle',
-          created: new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''),
-        }], done);
+        .expect(200, {
+          total_results: 1,
+          page: 1,
+          per_page: 5,
+          total_pages: 1,
+          rides: [{
+            rideID: 2,
+            startLat: -75,
+            startLong: -195,
+            endLat: 75,
+            endLong: 195,
+            riderName: 'rider\'s name',
+            driverName: 'driver\'s name',
+            driverVehicle: 'driver\'s vehicle',
+            created: new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''),
+          }],
+        }, done);
+    });
+
+    it('should return all rides with specified pagination settings', (done) => {
+      request(app)
+        .get('/rides?page=1&per_page=1')
+        .expect('Content-Type', /json/)
+        .expect(200, {
+          total_results: 2,
+          page: 1,
+          per_page: 1,
+          total_pages: 2,
+          rides: [{
+            rideID: 2,
+            startLat: -75,
+            startLong: -195,
+            endLat: 75,
+            endLong: 195,
+            riderName: 'rider\'s name',
+            driverName: 'driver\'s name',
+            driverVehicle: 'driver\'s vehicle',
+            created: new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''),
+          }],
+        }, done);
     });
   });
 

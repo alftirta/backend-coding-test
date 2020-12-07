@@ -82,7 +82,7 @@ _Response (400 - Bad Request)_
 }
 ```
 ---
-### GET /rides
+### GET /rides?page=<page_number>&per_page=<the_number_of_rides_per_page>
 
 > Get all rides
 
@@ -98,20 +98,26 @@ not needed
 
 _Response (200 - OK)_
 ```
-[
-  {
-    "rideID": <ride_id>,
-    "startLat": <starting_latitude_position>,
-    "startLong": <starting_longitude_position>,
-    "endLat": <ending_latitude_position>,
-    "endLong": <ending_longitude_position>,
-    "riderName": "<rider's name>",
-    "driverName": "<driver's name>",
-    "driverVehicle": "<driver's vehicle>",
-    "created": "<the time when the ride was recorded>"
-  },
-  ...
-]
+{
+  "total_results": <total results>,
+  "page": <page number>,
+  "per_page": <the number of rides per page>,
+  "total_pages": <total pages>,
+  "rides": [
+    {
+      "rideID": <ride_id>,
+      "startLat": <starting_latitude_position>,
+      "startLong": <starting_longitude_position>,
+      "endLat": <ending_latitude_position>,
+      "endLong": <ending_longitude_position>,
+      "riderName": "<rider's name>",
+      "driverName": "<driver's name>",
+      "driverVehicle": "<driver's vehicle>",
+      "created": "<the time when the ride was recorded>"
+    },
+    ...
+  ]
+}
 ```
 
 _Response (400 - Bad Request)_
