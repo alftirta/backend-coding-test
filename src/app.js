@@ -118,7 +118,8 @@ module.exports = (db) => {
   });
 
   app.get('/rides/:id', async (req, res) => {
-    await db.all(`SELECT * FROM Rides WHERE rideID='${req.params.id}'`, (err, rows) => {
+    const id = +req.params.id;
+    await db.all('SELECT * FROM Rides WHERE rideID=?', id, (err, rows) => {
       if (err) {
         return res.status(400).json({
           code: 0,
