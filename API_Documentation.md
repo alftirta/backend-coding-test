@@ -7,8 +7,8 @@ With Ride API you can record and obtain ride data. It has :
 ```
  - GET /
  - POST /rides
- - GET /rides
- - GET /ride/:id
+ - GET /rides?page=<page_number>&per_page=<the_number_of_rides_per_page>
+ - GET /rides/:id
 ```
 
 ## RESTful endpoints
@@ -129,7 +129,7 @@ _Response (400 - Bad Request)_
 }
 ```
 ---
-### GET /ride/:id
+### GET /rides/:id
 
 > Get ride by its id
 
