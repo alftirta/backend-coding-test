@@ -8,10 +8,12 @@ const db = new sqlite3.Database(':memory:');
 
 const buildSchemas = require('./src/schemas');
 
+const logger = require('./src/logger');
+
 db.serialize(() => {
   buildSchemas(db);
 
   const app = require('./src/app')(db);
 
-  app.listen(port, () => console.log(`App listening on port ${port}`));
+  app.listen(port, () => logger.info(`App listening on port ${port}`));
 });
