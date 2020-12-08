@@ -1,5 +1,7 @@
 'use strict';
 
+process.env.NODE_ENV = 'test';
+
 const request = require('supertest');
 
 const sqlite3 = require('sqlite3').verbose();

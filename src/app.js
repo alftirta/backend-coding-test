@@ -8,7 +8,17 @@ const jsonParser = bodyParser.json();
 
 const logger = require('./logger');
 
+const ExpressBrute = require('express-brute');
+const store = new ExpressBrute.MemoryStore();
+const bruteforce = new ExpressBrute(store, {
+  freeRetries: 10, // freeRetries :  The number of retries the user has before they need to start waiting
+});
+
 module.exports = (db) => {
+  if (process.env.NODE_ENV !== 'test') {
+    app.use(bruteforce.prevent);
+  }
+  
   app.get('/', async (req, res) => {
     await res.status(200).json({
       code: 1, message: 'ok', data: null
