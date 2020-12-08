@@ -10,7 +10,7 @@ const logger = require('./logger');
 
 const ExpressBrute = require('express-brute');
 const store = new ExpressBrute.MemoryStore();
-const bruteforce = new ExpressBrute(store, { freeRetries: 10 }); // freeRetries :  The number of retries the user has before they need to start waiting
+const bruteforce = new ExpressBrute(store, { freeRetries: 15 }); // freeRetries :  The number of retries the user has before they need to start waiting
 
 module.exports = (db) => {
   app.get('/', bruteforce.prevent, async (req, res) => {
