@@ -10,16 +10,22 @@ const logger = require('./logger');
 
 const ExpressBrute = require('express-brute');
 const store = new ExpressBrute.MemoryStore();
-const bruteforce = new ExpressBrute(store, { freeRetries: 15 }); // freeRetries :  The number of retries the user has before they need to start waiting
+const bruteforce = new ExpressBrute(store, {
+  freeRetries: 10, // freeRetries :  The number of retries the user has before they need to start waiting
+});
 
 module.exports = (db) => {
-  app.get('/', bruteforce.prevent, async (req, res) => {
+  if (process.env.NODE_ENV !== 'test') {
+    app.use(bruteforce.prevent);
+  }
+  
+  app.get('/', async (req, res) => {
     await res.status(200).json({
       code: 1, message: 'ok', data: null
     });
   });
 
-  app.post('/rides', jsonParser, bruteforce.prevent, async (req, res) => {
+  app.post('/rides', jsonParser, async (req, res) => {
     const {start_lat, start_long, end_lat, end_long, rider_name, driver_name, driver_vehicle} = req.body;
 
     if (Number(start_lat) < -75 || Number(start_lat) > 75 || Number(start_long) < -195 || Number(start_long) > 195) {
@@ -96,7 +102,7 @@ module.exports = (db) => {
     });
   });
 
-  app.get('/rides', bruteforce.prevent, async (req, res) => {
+  app.get('/rides', async (req, res) => {
     await db.all('SELECT * FROM Rides', (err, rows) => {
       if (err) {
         logger.error('Unknown error');
@@ -132,7 +138,7 @@ module.exports = (db) => {
     });
   });
 
-  app.get('/rides/:id', bruteforce.prevent, async (req, res) => {
+  app.get('/rides/:id', async (req, res) => {
     const id = +req.params.id;
     await db.all('SELECT * FROM Rides WHERE rideID=?', id, (err, rows) => {
       if (err) {
