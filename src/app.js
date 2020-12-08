@@ -18,7 +18,7 @@ module.exports = (db) => {
   if (process.env.NODE_ENV !== 'test') {
     app.use(bruteforce.prevent);
   }
-  
+
   app.get('/', async (req, res) => {
     await res.status(200).json({
       code: 1, message: 'ok', data: null
@@ -28,49 +28,10 @@ module.exports = (db) => {
   app.post('/rides', jsonParser, async (req, res) => {
     const {start_lat, start_long, end_lat, end_long, rider_name, driver_name, driver_vehicle} = req.body;
 
-    if (Number(start_lat) < -75 || Number(start_lat) > 75 || Number(start_long) < -195 || Number(start_long) > 195) {
-      logger.error('Start latitude and longitude must be between -75 to 75 and -195 to 195 degrees respectively');
-      return res.status(400).json({
-        code: 0,
-        message: 'Start latitude and longitude must be between -75 to 75 and -195 to 195 degrees respectively',
-        data: null
-      });
-    }
+    const validation = validate(start_lat, start_long, end_lat, end_long, rider_name, driver_name, driver_vehicle);
 
-    if (Number(end_lat) < -75 || Number(end_lat) > 75 || Number(end_long) < -195 || Number(end_long) > 195) {
-      logger.error('End latitude and longitude must be between -75 to 75 and -195 to 195 degrees respectively');
-      return res.status(400).json({
-        code: 0,
-        message: 'End latitude and longitude must be between -75 to 75 and -195 to 195 degrees respectively',
-        data: null
-      });
-    }
-
-    if (typeof rider_name !== 'string' || rider_name.length < 1) {
-      logger.error('Rider name must be a non empty string');
-      return res.status(400).json({
-        code: 0,
-        message: 'Rider name must be a non empty string',
-        data: null
-      });
-    }
-
-    if (typeof driver_name !== 'string' || driver_name.length < 1) {
-      logger.error('Driver name must be a non empty string');
-      return res.status(400).json({
-        code: 0,
-        message: 'Driver name must be a non empty string',
-        data: null
-      });
-    }
-
-    if (typeof driver_vehicle !== 'string' || driver_vehicle.length < 1) {
-      logger.error('Driver vehicle must be a non empty string');
-      return res.status(400).json({
-        code: 0,
-        message: 'Driver vehicle must be a non empty string',
-        data: null
-      });
+    if (validation) {
+      return res.status(400).json(validation);
     }
 
     const values = [start_lat, start_long, end_lat, end_long, rider_name, driver_name, driver_vehicle];
@@ -164,4 +125,51 @@ module.exports = (db) => {
   });
 
   return app;
+};
+
+const validate = (start_lat, start_long, end_lat, end_long, rider_name, driver_name, driver_vehicle) => {
+  if (Number(start_lat) < -75 || Number(start_lat) > 75 || Number(start_long) < -195 || Number(start_long) > 195) {
+    logger.error('Start latitude and longitude must be between -75 to 75 and -195 to 195 degrees respectively');
+    return {
+      code: 0,
+      message: 'Start latitude and longitude must be between -75 to 75 and -195 to 195 degrees respectively',
+      data: null
+    };
+  }
+
+  if (Number(end_lat) < -75 || Number(end_lat) > 75 || Number(end_long) < -195 || Number(end_long) > 195) {
+    logger.error('End latitude and longitude must be between -75 to 75 and -195 to 195 degrees respectively');
+    return {
+      code: 0,
+      message: 'End latitude and longitude must be between -75 to 75 and -195 to 195 degrees respectively',
+      data: null
+    };
+  }
+
+  if (typeof rider_name !== 'string' || rider_name.length < 1) {
+    logger.error('Rider name must be a non empty string');
+    return {
+      code: 0,
+      message: 'Rider name must be a non empty string',
+      data: null
+    };
+  }
+
+  if (typeof driver_name !== 'string' || driver_name.length < 1) {
+    logger.error('Driver name must be a non empty string');
+    return {
+      code: 0,
+      message: 'Driver name must be a non empty string',
+      data: null
+    };
+  }
+
+  if (typeof driver_vehicle !== 'string' || driver_vehicle.length < 1) {
+    logger.error('Driver vehicle must be a non empty string');
+    return {
+      code: 0,
+      message: 'Driver vehicle must be a non empty string',
+      data: null
+    };
+  }
 };
