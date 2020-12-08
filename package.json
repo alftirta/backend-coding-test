@@ -9,7 +9,8 @@
   "scripts": {
     "lint": "./node_modules/.bin/eslint .",
     "test": "npm run lint && mocha tests",
-    "coverage": "nyc npm run test",
+    "test:coverage": "nyc npm run test",
+    "test:load": "artillery run ./tests/load-testing.yml",
     "start": "node index.js",
     "dev": "nodemon index.js"
   },
@@ -29,6 +30,7 @@
     "winston": "^3.3.3"
   },
   "devDependencies": {
+    "artillery": "^1.6.1",
     "eslint": "^7.15.0",
     "mocha": "^6.1.4",
     "nodemon": "^2.0.6",

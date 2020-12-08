@@ -1,0 +1,38 @@
+config:
+  target: 'http://localhost:8090'
+  phases:
+    - duration: 3
+      arrivalRate: 3
+      name: Warm up
+    - duration: 6
+      arrivalRate: 3
+      rampTo: 30
+      name: Ramp up load
+    - duration: 30
+      arrivalRate: 30
+      name: Sustained load
+scenarios:
+  - name: 'test post a ride'
+    flow:
+      - post:
+          url: '/rides'
+          json:
+            start_lat: 0
+            start_long: 0
+            end_lat: 0
+            end_long: 0
+            rider_name: 'rider name'
+            driver_name: 'driver name'
+            driver_vehicle: 'driver vehicle'
+          capture:
+            json: '$[0].rideID'
+            as: 'id'
+      - get:
+          url: '/rides'
+      - get:
+          url: '/rides'
+          qs:
+            page: 1
+            per_page: 1
+      - get:
+          url: '/rides/{{ id }}'
